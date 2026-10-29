@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "darkys_lyrics",
+  "version": "${version}",
+  "name": "Darky's Lyrics",
+  "description": "A music-themed client menu and lyric HUD for Minecraft.",
+  "authors": ["Darky"],
+  "license": "All-Rights-Reserved",
+  "environment": "client",
+  "entrypoints": {
+    "client": ["dev.darky.lyrics.DarkysLyricsClient"]
+  },
+  "depends": {
+    "fabricloader": ">=0.18.1",
+    "minecraft": "~1.21.11",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}
