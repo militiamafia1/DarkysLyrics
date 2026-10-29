@@ -19,7 +19,7 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: '9.2'
+          gradle-version: 'current'
 
       - name: Find and build mod
         shell: bash
