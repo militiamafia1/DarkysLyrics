@@ -1,0 +1,39 @@
+
+name: Build DarkysLyrics
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.14'
+
+      - name: Build mod
+        run: |
+          PROJECT_DIR=$(find . -name build.gradle -not -path '*/.gradle/*' -printf '%h\n' | head -n 1)
+          if [ -z "$PROJECT_DIR" ]; then
+            echo "Could not find build.gradle"
+            exit 1
+          fi
+          cd "$PROJECT_DIR"
+          gradle build
+
+      - name: Upload mod JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: DarkysLyrics-JAR
+          path: '**/build/libs/*.jar'
+          if-no-files-found: error
