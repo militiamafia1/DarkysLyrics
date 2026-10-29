@@ -11,14 +11,32 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '21'
+
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.14'
-      - name: Build mod
+
+      - name: Find and build mod
+        shell: bash
         run: |
-          find . -name build.gradle -not -path '*/.gradle/*'
-          echo "Workflow started"
+          BUILD_FILE=$(find . -name build.gradle -not -path '*/.gradle/*' | head -n 1)
+          if [ -z "$BUILD_FILE" ]; then
+            echo "ERROR: Could not find build.gradle"
+            exit 1
+          fi
+          PROJECT_DIR=$(dirname "$BUILD_FILE")
+          echo "Building project in $PROJECT_DIR"
+          cd "$PROJECT_DIR"
+          gradle build
+
+      - name: Upload JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: DarkysLyrics-JAR
+          path: '**/build/libs/*.jar'
+          if-no-files-found: error
